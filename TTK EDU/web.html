@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TTK EDU</title>
+  <style>
+    :root {
+      --main:#6C7C59;
+      --white:#ffffff;
+      --glass:rgba(255,255,255,0.08);
+      --card:rgba(255,255,255,0.10);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI, sans-serif;}
+    body{
+      background:var(--main);
+      color:white;
+      padding-bottom:60px;
+    }
+
+    /* ===== HEADER ===== */
+    header{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 22px;
+      background:rgba(0,0,0,0.15);
+      backdrop-filter:blur(3px);
+    }
+    .brand{font-size:22px;font-weight:800;letter-spacing:0.5px;}
+
+    .menu{
+      display:flex;
+      gap:26px;
+      font-size:24px;
+    }
+    .menu-item{
+      position:relative;
+      cursor:pointer;
+      padding:6px 10px;
+      border-radius:8px;
+    }
+    .menu-item:hover{background:rgba(0,0,0,0.18);}    
+    .hint{
+      position:absolute;
+      bottom:-32px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,0.35);
+      padding:4px 8px;
+      font-size:12px;
+      border-radius:6px;
+      opacity:0;
+      transition:0.2s;
+      pointer-events:none;
+      white-space:nowrap;
+    }
+    .menu-item:hover .hint{opacity:1;bottom:-38px;}
+
+    /* Kích hoạt */
+    #activateArea{display:flex;align-items:center;gap:10px;}
+    #activateBtn{
+      background:white;color:black;font-weight:700;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;
+    }
+    #activateBox{display:none;}
+    #activateBox input{
+      padding:8px 10px;border-radius:8px;border:none;outline:none;width:160px;
+    }
+
+    /* ===== CONTENT WRAPPER ===== */
+    main{max-width:1100px;margin:auto;padding:20px;}
+
+    .card{
+      background:var(--card);
+      padding:20px;
+      border-radius:16px;
+      margin-bottom:20px;
+      box-shadow:0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    /* ===== TRANG CHỦ ===== */
+    #homeSection{display:block;}
+
+    .top-row{display:flex;justify-content:space-between;font-size:22px;font-weight:700;margin-bottom:18px;}
+    .stats{display:flex;gap:14px;}
+    .stat{
+      flex:1;
+      background:var(--glass);
+      border-radius:12px;
+      padding:14px;
+      text-align:center;
+    }
+    .icoBox{
+      width:48px;height:48px;
+      background:rgba(255,255,255,0.12);
+      margin:auto;
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:24px;
+      margin-bottom:10px;
+    }
+    .big{font-size:25px;font-weight:800;}
+    .label{opacity:0.9;margin-top:4px;}
+
+    /* LINKS */
+    .link-row{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+    .link-item{
+      display:flex;
+      align-items:center;
+      background:rgba(255,255,255,0.08);
+      padding:10px;
+      border-radius:10px;
+      gap:14px;
+      text-decoration:none;
+      color:white;
+    }
+    .link-icon{
+      width:40px;height:40px;
+      background:rgba(255,255,255,0.15);
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;
+    }
+
+    /* ===== KHÓA HỌC ===== */
+    #coursesSection{display:none;}
+
+    .course-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:18px;
+      margin-top:20px;
+    }
+    .course-box{
+      background:rgba(255,255,255,0.12);
+      padding:26px 10px;
+      border-radius:16px;
+      text-align:center;
+      cursor:pointer;
+      min-height:240px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .course-icon{font-size:56px;margin-bottom:12px;}
+    .course-title{font-size:16px;font-weight:700;}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">TTK EDU</div>
+
+  <div class="menu">
+    <div class="menu-item" id="m-home">🏠<div class="hint">Trang chủ</div></div>
+    <div class="menu-item" id="m-khoa">📖<div class="hint">Khóa học</div></div>
+    <div class="menu-item" id="m-thi">🖥<div class="hint">Thi thử</div></div>
+    <div class="menu-item" id="m-tl">📓<div class="hint">Tài liệu</div></div>
+  </div>
+
+  <div id="activateArea">
+    <button id="activateBtn">Kích hoạt khóa học</button>
+    <div id="activateBox"><input placeholder="Nhập mã..." /></div>
+  </div>
+</header>
+
+<main>
+  <!-- TRANG CHỦ -->
+  <section id="homeSection" class="card">
+
+    <div class="top-row">
+      <div>XIN CHÀO!</div>
+      <div id="today"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="icoBox">📚</div>
+        <div class="big">5</div>
+        <div class="label">Khóa đang học</div>
+      </div>
+      <div class="stat">
+        <div class="icoBox">⏰</div>
+        <div class="big" id="hours">0</div>
+        <div class="label">Giờ học tuần này</div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- LIÊN KẾT -->
+  <section class="card">
+    <h2 style="font-size:20px;font-weight:800;margin-bottom:14px;">Liên kết</h2>
+
+    <div class="link-row">
+      <a class="link-item" href="https://www.youtube.com/@trankiet0110" target="_blank">
+        <div class="link-icon">🔴</div>
+        <div>Kênh học tập</div>
+      </a>
+
+      <a class="link-item" href="https://www.facebook.com/groups/727876776388015" target="_blank">
+        <div class="link-icon">🔵</div>
+        <div>Nhóm học tập & thông báo</div>
+      </a>
+
+      <a class="link-item" href="https://docs.google.com/spreadsheets/d/1aV0VBnSMKYPesPkUy1j4INs0uzTyRfU7FmAfKzcCxFY" target="_blank">
+        <div class="link-icon">🈯</div>
+        <div>Sheet học tập</div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- KHÓA HỌC -->
+  <section id="coursesSection" class="card">
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:18px;">Khóa học</h2>
+
+    <div class="course-grid">
+      <div class="course-box">
+        <div class="course-icon">🇲</div>
+        <div class="course-title">Toán 12</div>
+      </div>
+      <div class="course-box">
+        <div class="course-icon">🇵</div>
+        <div class="course-title">Vật Lý 12</div>
+      </div>
+      <div class="course-box">
+        <div class="course-icon">🇪</div>
+        <div class="course-title">Tiếng Anh 12</div>
+      </div>
+      <div class="course-box">
+        <div class="course-icon">🇩 🇬 🇳 🇱</div>
+        <div class="course-title">Bổ trợ V-ACT</div>
+      </div>
+      <div class="course-box">
+        <div class="course-icon">🇨</div>
+        <div class="course-title">Bổ trợ CASIO</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  document.getElementById("today").innerText = new Date().toLocaleDateString("vi-VN");
+
+  let act = false;
+  document.getElementById("activateBtn").onclick = () =>{
+    act = !act;
+    document.getElementById("activateBox").style.display = act ? "block":"none";
+  }
+
+  const home = document.getElementById("homeSection");
+  const courses = document.getElementById("coursesSection");
+
+  document.getElementById("m-home").onclick = ()=>{
+    home.style.display = "block";
+    courses.style.display = "none";
+  }
+  document.getElementById("m-khoa").onclick = () =>{
+    home.style.display = "none";
+    courses.style.display = "block";
+  }
+/* ============================
+   KÍCH HOẠT KHÓA HỌC
+============================= */
+
+// Danh sách mã – bạn muốn đổi mã nào cũng được
+const codeList = {
+  "TOAN12-ABC123": "Toán 12",
+  "LY12-XYZ999": "Vật Lý 12",
+  "ANH12-QWE555": "Tiếng Anh 12",
+  "VACT-HELLO77": "Bổ trợ V-ACT",
+  "CASIO-909090": "Bổ trợ CASIO"
+};
+
+// Lấy danh sách khóa đã kích hoạt từ localStorage
+let activated = JSON.parse(localStorage.getItem("activatedCourses") || "[]");
+
+// Highlight khóa đã kích hoạt khi mở web
+function refreshActivatedCourses(){
+  document.querySelectorAll(".course-box").forEach(box => {
+    let title = box.querySelector(".course-title").innerText;
+    if(activated.includes(title)){
+      box.style.outline = "4px solid #fff";
+      box.style.background = "rgba(255,255,255,0.25)";
+    }
+  });
+}
+refreshActivatedCourses();
+
+// Xử lý nhập mã
+document.querySelector("#activateBox input").addEventListener("keypress", e =>{
+  if(e.key === "Enter"){
+    let code = e.target.value.trim().toUpperCase();
+
+    if(codeList[code]){
+      let course = codeList[code];
+
+      if(!activated.includes(course)){
+        activated.push(course);
+        localStorage.setItem("activatedCourses", JSON.stringify(activated));
+        alert("Kích hoạt thành công: " + course);
+        refreshActivatedCourses();
+      } else {
+        alert("Khóa này đã được kích hoạt rồi!");
+      }
+
+    } else {
+      alert("❌ Mã không hợp lệ!");
+    }
+
+    e.target.value = "";
+  }
+});
+
+</script>
+
+</body>
+</html>
